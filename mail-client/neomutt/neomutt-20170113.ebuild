@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -84,6 +84,7 @@ DEPEND="${CDEPEND}
 	)"
 RDEPEND="${CDEPEND}
 	selinux? ( sec-policy/selinux-mutt )
+	!mail-client/mutt
 "
 
 # github prefixes with project name
@@ -125,7 +126,6 @@ src_configure() {
 		"--with-docdir=${EPREFIX}/usr/share/doc/${PN}-${PVR}"
 		"--with-regex"
 		"--with-exec-shell=${EPREFIX}/bin/sh"
-		"--program-prefix=neo"
 	)
 
 	if [[ ${CHOST} == *-solaris* ]] ; then
@@ -200,8 +200,8 @@ src_install() {
 			-e 's#in @docdir@,#at http://www.neomutt.org/,#' \
 			-e "s#@sysconfdir@#${EPREFIX}/etc/${PN}#" \
 			-e "s#@bindir@#${EPREFIX}/usr/bin#" \
-			doc/mutt.man > neomutt.1
-		doman neomutt.1
+			doc/mutt.man > mutt.1
+		doman mutt.1
 	else
 		# nuke manpages that should be provided by an MTA, bug #177605
 		rm "${ED}"/usr/share/man/man5/{mbox,mmdf}.5 \
@@ -209,12 +209,12 @@ src_install() {
 	fi
 
 	for f in "${ED}"/usr/share/locale/*/LC_MESSAGES/mutt.mo ; do
-		mv "${f}" "${f%/*}/neomutt.mo"
+		mv "${f}" "${f%/*}/mutt.mo"
 	done
 
 	if use !prefix ; then
-		fowners root:mail /usr/bin/neomutt_dotlock
-		fperms g+s /usr/bin/neomutt_dotlock
+		fowners root:mail /usr/bin/mutt_dotlock
+		fperms g+s /usr/bin/mutt_dotlock
 	fi
 
 	dodoc BEWARE COPYRIGHT ChangeLog NEWS OPS* PATCHES README* TODO
