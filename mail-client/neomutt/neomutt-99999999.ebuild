@@ -19,7 +19,7 @@ fi
 
 DESCRIPTION="Teaching an Old Dog New Tricks"
 HOMEPAGE="https://www.neomutt.org/"
-IUSE="berkdb crypt debug doc gdbm gnutls gpg idn imap kerberos libressl mbox nls nntp notmuch pop qdbm sasl selinux sidebar slang smime smtp ssl tokyocabinet"
+IUSE="berkdb crypt debug doc gdbm gnutls gpg idn imap kerberos libressl mbox nls nntp notmuch pop qdbm sasl selinux slang smime smtp ssl tokyocabinet"
 SLOT="0"
 LICENSE="GPL-2"
 CDEPEND="
@@ -112,7 +112,6 @@ src_configure() {
 		"$(use_enable nls)"
 		"$(use_enable nntp)"
 		"$(use_enable pop)"
-		"$(use_enable sidebar)"
 		"$(use_enable smime)"
 		"$(use_enable smtp)"
 		"$(use_enable notmuch)"
@@ -124,7 +123,6 @@ src_configure() {
 		"--enable-nfs-fix"
 		"--sysconfdir=${EPREFIX}/etc/${PN}"
 		"--with-docdir=${EPREFIX}/usr/share/doc/${PN}-${PVR}"
-		"--with-regex"
 		"--with-exec-shell=${EPREFIX}/bin/sh"
 	)
 
@@ -148,11 +146,6 @@ src_configure() {
 			break
 		fi
 	done
-	if [[ -n ${ucache} ]] ; then
-		myconf+=( "--enable-hcache" )
-	else
-		myconf+=( "--disable-hcache" )
-	fi
 	for hcache in "${hcaches[@]}" ; do
 		[[ ${hcache} == ${ucache} ]] \
 			&& myconf+=( "--with-${hcache#*:}" ) \
@@ -217,5 +210,5 @@ src_install() {
 		fperms g+s /usr/bin/mutt_dotlock
 	fi
 
-	dodoc BEWARE COPYRIGHT ChangeLog NEWS OPS* PATCHES README* TODO
+	dodoc COPYRIGHT ChangeLog OPS* PATCHES README*
 }
