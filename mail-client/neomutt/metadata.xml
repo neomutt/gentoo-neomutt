@@ -14,5 +14,8 @@
     <flag name="smime">Enable support for smime</flag>
     <flag name="tokyocabinet">Enable tokyocabinet database backend for header
       caching</flag>
+    <flag name="kyotocabinet">Enable kyotocabinet database backend for header
+      caching</flag>
+    <flag name="lmdb">Enable LMDB backend for header caching</flag>
   </use>
 </pkgmetadata>
