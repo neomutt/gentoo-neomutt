@@ -85,6 +85,7 @@ src_configure() {
 		"$(use_enable notmuch)"
 		"$(use_with idn)"
 		"$(use_with kerberos gss)"
+		"$(use_with sasl)"
 		"--with-$(use slang && echo slang || echo curses)=${EPREFIX}/usr"
 		"--enable-nfs-fix"
 		"--sysconfdir=${EPREFIX}/etc/${PN}"
@@ -118,14 +119,11 @@ src_configure() {
 			|| myconf+=( "--without-${hcache#*:}" )
 	done
 
-	# there's no need for gnutls, ssl or sasl without socket support
 	if use gnutls; then
 		myconf+=( "--with-gnutls" )
 	elif use ssl; then
 		myconf+=( "--with-ssl" )
 	fi
-	# not sure if this should be mutually exclusive with the other two
-	myconf+=( "$(use_with sasl)" )
 
 	if use mbox; then
 		myconf+=( "--with-mailpath=${EPREFIX}/var/spool/mail" )
