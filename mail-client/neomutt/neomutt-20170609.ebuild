@@ -18,20 +18,20 @@ fi
 
 DESCRIPTION="Teaching an Old Dog New Tricks"
 HOMEPAGE="https://www.neomutt.org/"
-IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl lua mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet"
+IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl lua mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet kyotocabinet lmdb"
 SLOT="0"
 LICENSE="GPL-2"
 CDEPEND="
 	app-misc/mime-types
 	nls? ( virtual/libintl )
-	tokyocabinet?  ( dev-db/tokyocabinet )
-	!tokyocabinet? (
-		qdbm?  ( dev-db/qdbm )
-		!qdbm? (
-			gdbm?  ( sys-libs/gdbm )
-			!gdbm? ( berkdb? ( >=sys-libs/db-4:= ) )
-		)
-	)
+
+	tokyocabinet? ( dev-db/tokyocabinet )
+	qdbm? ( dev-db/qdbm )
+	gdbm? ( sys-libs/gdbm )
+	berkdb? ( >=sys-libs/db-4:= )
+	kyotocabinet? ( dev-db/kyotocabinet )
+	lmdb? ( dev-db/lmdb )
+
 	gnutls?  ( >=net-libs/gnutls-1.0.17 )
 	!gnutls? (
 		ssl? (
@@ -93,6 +93,12 @@ src_configure() {
 		"$(use_with idn)"
 		"$(use_with kerberos gss)"
 		"$(use_with sasl)"
+		"$(use_with gdbm)"
+		"$(use_with tokyocabinet)"
+		"$(use_with kyotocabinet)"
+		"$(use_with qdbm)"
+		"$(use_with berkdb bdb)"
+		"$(use_with lmdb)"
 		"--with-$(use slang && echo slang || echo curses)=${EPREFIX}/usr"
 		"--enable-nfs-fix"
 		"--sysconfdir=${EPREFIX}/etc/${PN}"
@@ -104,27 +110,6 @@ src_configure() {
 		# arrows in index view do not show when using wchar_t
 		myconf+=( "--without-wc-funcs" )
 	fi
-
-	# mutt prioritizes gdbm over bdb, so we will too.
-	# hcache feature requires at least one database is in USE.
-	local hcaches=(
-		"tokyocabinet"
-		"qdbm"
-		"gdbm"
-		"berkdb:bdb"
-	)
-	local ucache hcache lcache
-	for hcache in "${hcaches[@]}" ; do
-		if use ${hcache%%:*} ; then
-			ucache=${hcache}
-			break
-		fi
-	done
-	for hcache in "${hcaches[@]}" ; do
-		[[ ${hcache} == ${ucache} ]] \
-			&& myconf+=( "--with-${hcache#*:}" ) \
-			|| myconf+=( "--without-${hcache#*:}" )
-	done
 
 	if use gnutls; then
 		myconf+=( "--with-gnutls" )
