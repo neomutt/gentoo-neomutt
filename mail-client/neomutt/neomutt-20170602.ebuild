@@ -18,7 +18,7 @@ fi
 
 DESCRIPTION="Teaching an Old Dog New Tricks"
 HOMEPAGE="https://www.neomutt.org/"
-IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet"
+IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl lua mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet"
 SLOT="0"
 LICENSE="GPL-2"
 CDEPEND="
@@ -50,6 +50,14 @@ CDEPEND="
 	notmuch? ( net-mail/notmuch )
 	slang? ( sys-libs/slang )
 	!slang? ( >=sys-libs/ncurses-5.2:0 )
+	lua? (
+		|| (
+			dev-lang/lua:0
+			dev-lang/lua:5.1
+			dev-lang/lua:5.2
+			dev-lang/lua:5.3
+		)
+	)
 "
 DEPEND="${CDEPEND}
 	net-mail/mailbase
@@ -85,6 +93,7 @@ src_configure() {
 		"$(use_enable notmuch)"
 		"$(use_with idn)"
 		"$(use_with kerberos gss)"
+		"$(use_enable lua)"
 		"--with-$(use slang && echo slang || echo curses)=${EPREFIX}/usr"
 		"--enable-nfs-fix"
 		"--sysconfdir=${EPREFIX}/etc/${PN}"
