@@ -52,8 +52,6 @@ CDEPEND="
 	!slang? ( >=sys-libs/ncurses-5.2:0 )
 	lua? (
 		|| (
-			dev-lang/lua:0
-			dev-lang/lua:5.1
 			dev-lang/lua:5.2
 			dev-lang/lua:5.3
 		)
