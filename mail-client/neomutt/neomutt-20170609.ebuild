@@ -18,7 +18,7 @@ fi
 
 DESCRIPTION="Teaching an Old Dog New Tricks"
 HOMEPAGE="https://www.neomutt.org/"
-IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet"
+IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl lua mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet"
 SLOT="0"
 LICENSE="GPL-2"
 CDEPEND="
@@ -50,6 +50,12 @@ CDEPEND="
 	notmuch? ( net-mail/notmuch )
 	slang? ( sys-libs/slang )
 	!slang? ( >=sys-libs/ncurses-5.2:0 )
+	lua? (
+		|| (
+			dev-lang/lua:5.2
+			dev-lang/lua:5.3
+		)
+	)
 "
 DEPEND="${CDEPEND}
 	net-mail/mailbase
@@ -83,6 +89,7 @@ src_configure() {
 		"$(use_enable nls)"
 		"$(use_enable smime)"
 		"$(use_enable notmuch)"
+		"$(use_enable lua)"
 		"$(use_with idn)"
 		"$(use_with kerberos gss)"
 		"--with-$(use slang && echo slang || echo curses)=${EPREFIX}/usr"
@@ -146,6 +153,8 @@ src_install() {
 	# A man-page is always handy, so fake one
 	if use !doc; then
 		emake -C doc DESTDIR="${D}" muttrc.man || die
+		cp doc/muttrc.man muttrc.5
+		doman muttrc.5
 		# make the fake slightly better, bug #413405
 		sed -e 's#@docdir@/manual.txt#http://www.neomutt.org/doc/devel/manual.html#' \
 			-e 's#in @docdir@,#at http://www.neomutt.org/,#' \
@@ -163,5 +172,5 @@ src_install() {
 		mv "${f}" "${f%/*}/mutt.mo"
 	done
 
-	dodoc COPYRIGHT ChangeLog OPS* README*
+	dodoc COPYRIGHT ChangeLog.md OPS* README*
 }
