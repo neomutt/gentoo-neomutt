@@ -153,6 +153,8 @@ src_install() {
 	# A man-page is always handy, so fake one
 	if use !doc; then
 		emake -C doc DESTDIR="${D}" muttrc.man || die
+		cp doc/muttrc.man muttrc.5
+		doman muttrc.5
 		# make the fake slightly better, bug #413405
 		sed -e 's#@docdir@/manual.txt#http://www.neomutt.org/doc/devel/manual.html#' \
 			-e 's#in @docdir@,#at http://www.neomutt.org/,#' \
