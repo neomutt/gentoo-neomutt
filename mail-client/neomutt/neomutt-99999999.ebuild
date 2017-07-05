@@ -163,5 +163,5 @@ src_install() {
 		mv "${f}" "${f%/*}/mutt.mo"
 	done
 
-	dodoc COPYRIGHT ChangeLog OPS* README*
+	dodoc COPYRIGHT ChangeLog* OPS* README*
 }
