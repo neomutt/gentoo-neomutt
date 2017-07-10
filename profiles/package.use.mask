@@ -1,3 +1,6 @@
 # At the time of writing, BDB+NeoMutt is broken on Gentoo in general and
 # especially on multilib systems.
 mail-client/neomutt berkdb
+
+# The needed version of lua is still masked.
+mail-client/neomutt lua

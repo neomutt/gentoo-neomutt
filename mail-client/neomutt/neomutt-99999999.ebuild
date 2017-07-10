@@ -18,7 +18,7 @@ fi
 
 DESCRIPTION="Teaching an Old Dog New Tricks"
 HOMEPAGE="https://www.neomutt.org/"
-IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet kyotocabinet lmdb"
+IUSE="berkdb crypt debug doc gdbm gnutls gpg idn kerberos libressl lua mbox nls notmuch qdbm sasl selinux slang smime ssl tokyocabinet kyotocabinet lmdb"
 SLOT="0"
 LICENSE="GPL-2"
 CDEPEND="
